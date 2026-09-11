@@ -9,6 +9,9 @@
 			"version": "latest",
 			"bicepVersion": "latest"
 		},
+    	"ghcr.io/jlaundry/devcontainer-features/azure-functions-core-tools:1": {
+			"version": "4.14"
+		},
 		"ghcr.io/devcontainers/features/terraform:1": {
 			"installSentinel": true,
 			"installTFsec": true,
@@ -43,8 +46,6 @@
 			]
 		}
 	}
-
-	// "customizations": {},
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
