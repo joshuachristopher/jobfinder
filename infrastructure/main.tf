@@ -1,32 +1,36 @@
-resource "azurerm_resource_group" "example" {
-  name     = "example-group"
-  location = "West Europe"
+provider "azurerm" {
+  features {}
 }
 
-resource "azurerm_storage_account" "example" {
-  name                     = "examplesa"
-  resource_group_name      = azurerm_resource_group.example.name
-  location                 = azurerm_resource_group.example.location
+resource "azurerm_resource_group" "job-finder" {
+  name     = "job-finder-group"
+  location = "Central US"
+}
+
+resource "azurerm_storage_account" "job-finder" {
+  name                     = "job-finder-sa"
+  resource_group_name      = azurerm_resource_group.job-finder.name
+  location                 = azurerm_resource_group.job-finder.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 }
 
-resource "azurerm_service_plan" "example" {
-  name                = "example-service-plan"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+resource "azurerm_service_plan" "job-finder" {
+  name                = "job-finder-service-plan"
+  location            = azurerm_resource_group.job-finder.location
+  resource_group_name = azurerm_resource_group.job-finder.name
   os_type             = "Linux"
-  sku_name            = "S1"
+  sku_name            = "Y1"
 }
 
-resource "azurerm_linux_function_app" "example" {
-  name                = "example-function-app"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
-  service_plan_id     = azurerm_service_plan.example.id
+resource "azurerm_linux_function_app" "job-finder" {
+  name                = "job-finder-function-app"
+  location            = azurerm_resource_group.job-finder.location
+  resource_group_name = azurerm_resource_group.job-finder.name
+  service_plan_id     = azurerm_service_plan.job-finder.id
 
-  storage_account_name       = azurerm_storage_account.example.name
-  storage_account_access_key = azurerm_storage_account.example.primary_access_key
+  storage_account_name       = azurerm_storage_account.job-finder.name
+  storage_account_access_key = azurerm_storage_account.job-finder.primary_access_key
 
   site_config {
     application_stack {
@@ -35,9 +39,9 @@ resource "azurerm_linux_function_app" "example" {
   }
 }
 
-resource "azurerm_function_app_function" "example" {
-  name            = "example-function-app-function"
-  function_app_id = azurerm_linux_function_app.example.id
+resource "azurerm_function_app_function" "job-finder" {
+  name            = "job-finder-function-app-function"
+  function_app_id = azurerm_linux_function_app.job-finder.id
   language        = "Python"
   test_data = jsonencode({
     "name" = "Azure"
